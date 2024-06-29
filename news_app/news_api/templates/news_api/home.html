@@ -14,14 +14,14 @@
 
         <form method="get" action="" class="mb-8">
             <div class="flex items-center justify-center">
-                <input type="text" name="keyword" placeholder="Enter keyword" class="w-full md:w-1/2 p-2 border border-gray-300 rounded-l-md focus:outline-none">
+                <input type="text" name="keyword" placeholder="Enter keyword" class="w-full md:w-1/2 p-2 border border-gray-300 rounded-l-md focus:outline-none" value="{{ keyword }}">
                 <button type="submit" class="bg-blue-500 text-white p-2 rounded-r-md hover:bg-blue-700">Search</button>
             </div>
         </form>
 
-        {% comment %} {% if keyword %} {% endcomment %}
+        {% if keyword %}
         <p class="text-lg font-semibold text-center mb-4">Showing results for: <span class="text-blue-500">{{ keyword }}</span></p>
-        {% comment %} {% endif %} {% endcomment %}
+        {% endif %}
 
         <!--Buttons for sort-->
         <div class="flex justify-center mb-8">
@@ -30,8 +30,7 @@
             </button>
         </div>
         
-                 
-        
+  
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {% for i in articles %}
                 <div class="bg-white rounded-lg shadow-lg p-6">
