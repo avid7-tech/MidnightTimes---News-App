@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'news_api',
     'tailwind',
     'theme',
+    'memcache',
 ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -129,9 +130,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',  # Replace with your Memcached server address and port
     }
 }
+
+CACHE_MIDDLEWARE_SECONDS = 900  # 15 minutes
