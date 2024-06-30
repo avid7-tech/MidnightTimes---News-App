@@ -9,6 +9,11 @@ NEWS_API_KEY = os.getenv('NEWS_API_KEY')
 
 def home(request):
     keyword = request.GET.get('keyword')
+    language = request.GET.get('language')
+    category = request.GET.get('category')
+    sortBy = request.GET.get('sortBy')
+    from_date = request.GET.get('from_date')
+    to_date = request.GET.get('to_date')      
 
     if keyword:
         cache_key = f'news_{keyword}'  # Unique cache key based on keyword
@@ -19,7 +24,24 @@ def home(request):
             return render(request, 'news_api/home.html', {'articles': cached_articles})
 
         try:
-            url = f'https://newsapi.org/v2/everything?q={keyword}&from=2024-05-29&sortBy=publishedAt&apiKey={NEWS_API_KEY}'
+            url = f'https://newsapi.org/v2/everything?q={keyword}&apiKey={NEWS_API_KEY}'
+            # LANGUAGE
+            if language:
+                url += f'&language={language}'
+            # CATEGORY
+            if category:
+                url += f'&category={category}'
+            # SORT BY
+            if sortBy:
+                url += f'&sortBy={sortBy}'
+            # DATE RANGE
+            if from_date:
+                url += f'&from={from_date}'
+            if to_date:
+                url += f'&to={to_date}'
+            
+            
+            
             response = requests.get(url)
             response.raise_for_status()  # Raise an exception for non-200 status codes
             data = response.json()
