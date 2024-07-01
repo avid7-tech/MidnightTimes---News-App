@@ -142,5 +142,5 @@ CACHE_MIDDLEWARE_SECONDS = 900  # 15 minutes
 
 LOGIN_URL = '/accounts/login'
 
-LOGIN_REDIRECT_URL = '/tweet/'
-LOGOUT_REDIRECT_URL = '/tweet/'
+LOGIN_REDIRECT_URL = '/news_api/'
+LOGOUT_REDIRECT_URL = '/news_api/'
