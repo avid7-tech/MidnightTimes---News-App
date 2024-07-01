@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, redirect
 from .forms import TweetForm, UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 
+
 load_dotenv()
 NEWS_API_KEY = os.getenv('NEWS_API_KEY')
 

@@ -1,4 +1,3 @@
-{% comment %} {% load static tailwind_tags %} {% endcomment %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -11,15 +10,15 @@
     Chai aur Django
     {% endblock %}
   </title>
-  {% comment %} {% tailwind_css %} {% endcomment %}
 </head>
 <body>
   <!-- Logout Button -->
-        
+  {% if user.is_authenticated %}
   <form  method="post" action="{% url 'logout' %}">
       {% csrf_token %}
       <button class="btn btn-primary" type="submit">Logout</button>
   </form>
+  {% endif %}
   <div class="container">
     {% block content %}
     {% endblock %}
