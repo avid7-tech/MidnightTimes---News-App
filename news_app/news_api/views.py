@@ -86,21 +86,29 @@ def register(request):
   return render(request, 'registration/register.html', {'form': form})
 
 def tweet_list(request):
-  tweets = Tweet.objects.all().order_by('-created_at')
+  # Filter tweets based on current logged-in user
+  tweets = Tweet.objects.filter(user=request.user).order_by('-created_at')
   return render(request, 'tweet_list.html', {'tweets': tweets})
 
 @login_required
 def tweet_create(request):
   if request.method == "POST":
-    form = TweetForm(request.POST, request.FILES)
-    if form.is_valid():
-      tweet = form.save(commit=False)
-      tweet.user = request.user
-      tweet.save()
-      return redirect('tweet_list')
+      form = TweetForm(request.POST)
+      if form.is_valid():
+          text = form.cleaned_data['text'].strip()  # Strip whitespace from text
+          # Check if the tweet already exists for the user
+          existing_keyword = Tweet.objects.filter(user=request.user, text__iexact=text).first()
+          if existing_keyword:
+              form.add_error('text', 'You have already added this keyword!')
+          else:
+              tweet = form.save(commit=False)
+              tweet.user = request.user
+              tweet.save()
+              return redirect('tweet_list')
   else:
-    form = TweetForm()
+      form = TweetForm()
   return render(request, 'tweet_form.html', {'form': form})
+
 
 @login_required
 def tweet_delete(request, tweet_id):
