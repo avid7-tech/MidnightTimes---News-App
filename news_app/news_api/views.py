@@ -4,6 +4,10 @@ import requests
 from dotenv import load_dotenv
 import os
 
+from .forms import UserRegistrationForm
+from django.contrib.auth import login
+from django.shortcuts import get_object_or_404, redirect
+
 load_dotenv()
 NEWS_API_KEY = os.getenv('NEWS_API_KEY')
 
@@ -61,3 +65,18 @@ def home(request):
         context = {}
 
     return render(request, 'news_api/home.html', context)
+
+
+def register(request):
+  if request.method == 'POST':
+    form = UserRegistrationForm(request.POST)
+    if form.is_valid():
+      user = form.save(commit=False)
+      user.set_password(form.cleaned_data['password1'])
+      user.save()
+      login(request, user)
+      return redirect('tweet_list')
+  else:
+    form = UserRegistrationForm()
+
+  return render(request, 'registration/register.html', {'form': form})

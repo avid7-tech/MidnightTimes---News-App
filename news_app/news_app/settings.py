@@ -62,7 +62,7 @@ ROOT_URLCONF = 'news_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'news_api' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,3 +139,8 @@ CACHES = {
 }
 
 CACHE_MIDDLEWARE_SECONDS = 900  # 15 minutes
+
+LOGIN_URL = '/accounts/login'
+
+LOGIN_REDIRECT_URL = '/tweet/'
+LOGOUT_REDIRECT_URL = '/tweet/'
