@@ -20,6 +20,15 @@
         </h1>
         
         <div class="flex flex-col">
+            <div class="mb-4">
+                <!-- Logout Button -->
+                {% if user.is_authenticated %}
+                  <form  method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</button>
+                  </form>
+                {% endif %}
+            </div>
             <p class="mb-4">
               <a href="{% url 'tweet_create' %}" class="text-white bg-blue-500 py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 Create Keyword
@@ -27,7 +36,7 @@
             </p>
             <p>
               <a href="{% url 'tweet_list' %}" class="text-white bg-blue-500 py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Keywords
+                See Keywords
               </a>
             </p>
           </div>

@@ -12,13 +12,16 @@
   </title>
 </head>
 <body>
-  <!-- Logout Button -->
-  {% if user.is_authenticated %}
-  <form  method="post" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <button class="btn btn-primary" type="submit">Logout</button>
-  </form>
-  {% endif %}
+  <div class="mt-5 d-flex justify-content-end">
+    <!-- Logout Button -->
+    {% if user.is_authenticated %}
+      <form  method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button class="btn btn-danger me-5" type="submit">Logout</button>
+      </form>
+    {% endif %}
+  </div>
+  
   <div class="container">
     {% block content %}
     {% endblock %}
