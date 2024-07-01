@@ -9,19 +9,19 @@ Keyword Page
 <h1 class="text-center mt-4">Keywords Page</h1>
 
 <div class="d-flex justify-content-between align-items-center mt-3">
-  <a href="{% url 'tweet_create' %}" class="btn btn-primary">Add a Keyword</a>
+  <a href="{% url 'keyword_create' %}" class="btn btn-primary">Add a Keyword</a>
   <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
 </div>
 
 <div class="container mt-4">
   <div class="row row-cols-1 row-cols-md-3 g-3">
-    {% for tweet in tweets %}
+    {% for keyword in keywords %}
     <div class="col">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">{{ tweet.text }}</h5>
-          {% if tweet.user == user %}
-          <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger">Delete</a>
+          <h5 class="card-title">{{ keyword.text }}</h5>
+          {% if keyword.user == user %}
+          <a href="{% url 'keyword_delete' keyword.id %}" class="btn btn-danger">Delete</a>
           {% endif %}
         </div>
       </div>

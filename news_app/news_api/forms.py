@@ -1,11 +1,11 @@
 from django import forms
-from .models import Tweet
+from .models import Keyword
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-class TweetForm(forms.ModelForm):
+class KeywordForm(forms.ModelForm):
     class Meta:
-        model = Tweet
+        model = Keyword
         fields = ['text']
 
 class UserRegistrationForm(UserCreationForm):

@@ -4,11 +4,11 @@ import requests
 from dotenv import load_dotenv
 import os
 
-from .models import Tweet
+from .models import Keyword
 from .forms import UserRegistrationForm
 from django.contrib.auth import login
 from django.shortcuts import get_object_or_404, redirect
-from .forms import TweetForm, UserRegistrationForm
+from .forms import KeywordForm, UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -80,41 +80,41 @@ def register(request):
       user.set_password(form.cleaned_data['password1'])
       user.save()
       login(request, user)
-      return redirect('tweet_list')
+      return redirect('keyword_list')
   else:
     form = UserRegistrationForm()
 
   return render(request, 'registration/register.html', {'form': form})
 
-def tweet_list(request):
-  # Filter tweets based on current logged-in user
-  tweets = Tweet.objects.filter(user=request.user).order_by('-created_at')
-  return render(request, 'tweet_list.html', {'tweets': tweets})
+def keyword_list(request):
+  # Filter keywords based on current logged-in user
+  keywords = Keyword.objects.filter(user=request.user).order_by('-created_at')
+  return render(request, 'keyword_list.html', {'keywords': keywords})
 
 @login_required
-def tweet_create(request):
+def keyword_create(request):
   if request.method == "POST":
-      form = TweetForm(request.POST)
+      form = KeywordForm(request.POST)
       if form.is_valid():
           text = form.cleaned_data['text'].strip()  # Strip whitespace from text
-          # Check if the tweet already exists for the user
-          existing_keyword = Tweet.objects.filter(user=request.user, text__iexact=text).first()
+          # Check if the keyword already exists for the user
+          existing_keyword = Keyword.objects.filter(user=request.user, text__iexact=text).first()
           if existing_keyword:
               form.add_error('text', 'You have already added this keyword!')
           else:
-              tweet = form.save(commit=False)
-              tweet.user = request.user
-              tweet.save()
-              return redirect('tweet_list')
+              keyword = form.save(commit=False)
+              keyword.user = request.user
+              keyword.save()
+              return redirect('keyword_list')
   else:
-      form = TweetForm()
-  return render(request, 'tweet_form.html', {'form': form})
+      form = KeywordForm()
+  return render(request, 'keyword_form.html', {'form': form})
 
 
 @login_required
-def tweet_delete(request, tweet_id):
-  tweet = get_object_or_404(Tweet, pk=tweet_id, user = request.user)
+def keyword_delete(request, keyword_id):
+  keyword = get_object_or_404(Keyword, pk=keyword_id, user = request.user)
   if request.method == 'POST':
-    tweet.delete()
-    return redirect('tweet_list')
-  return render(request, 'tweet_confirm_delete.html', {'tweet': tweet})
+    keyword.delete()
+    return redirect('keyword_list')
+  return render(request, 'keyword_confirm_delete.html', {'keyword': keyword})
