@@ -1,18 +1,21 @@
-<!-- search_history.html -->
+{% extends "layout.html" %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Search History</title>
-</head>
-<body>
-    <h1>Search History</h1>
-    <ul>
-        {% for entry in search_history %}
-            <li>{{ entry.keyword }} - {{ entry.searched_at }}</li>
-        {% empty %}
-            <li>No search history available.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% block title %}
+<title>Search History</title>
+{% endblock %} 
+
+{% block content %}
+
+<h1>Search History</h1>
+<ul class="list-group search-history">
+  {% for entry in search_history %}
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <span class="badge bg-primary rounded-pill">{{ entry.keyword }}</span>
+    <span class="text-muted">{{ entry.searched_at }}</span>
+  </li>
+  {% empty %}
+  <li class="list-group-item text-center">No search history available.</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'home' %}" class="btn btn-success mt-3">Back to Home</a> 
+{% endblock %}
