@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 # Create your models here.
 
 class Keyword(models.Model):
@@ -19,6 +19,7 @@ class SearchHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     keyword = models.CharField(max_length=255)
     results = models.JSONField(default=dict)
+    last_fetched = models.DateTimeField(default=timezone.now)
     searched_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
