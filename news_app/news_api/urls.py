@@ -11,4 +11,8 @@ urlpatterns = [
     # 
     path('control/block/<int:user_id>/', views.block_user, name='block_user'),
     path('control/set_limit/<int:user_id>/', views.set_limit, name='set_limit'),
+    
+    path('login/', views.signin, name='signin'),
+    path('not_authorized/', views.not_authorized, name='not_authorized'),
+
 ]

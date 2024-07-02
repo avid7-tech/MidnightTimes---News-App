@@ -123,6 +123,7 @@ def keyword_delete(request, keyword_id):
 
 @login_required
 def control(request):
+    
     # Get all users (excluding the currently logged-in user)
     users = User.objects.filter(is_superuser=False).exclude(pk=request.user.pk)
 
@@ -169,3 +170,18 @@ def set_limit(request, user_id):
 
 
     return redirect('control')  # Redirect if not a POST request
+
+from django.shortcuts import render
+
+def not_authorized(request):
+  return render(request, 'control_panel/not_auth.html')  # New template for non-superuser message
+
+def signin(request):
+  # Your existing login logic here
+  if request.user.is_authenticated:
+    if request.user.is_superuser:
+      # Allow superuser to access the control panel
+      return redirect('control')
+    else:
+      # Redirect non-superuser login attempts
+      return redirect('not_authorized')
