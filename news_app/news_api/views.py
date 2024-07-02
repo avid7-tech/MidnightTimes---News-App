@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404, redirect
 from .forms import KeywordForm, UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 from .models import SearchHistory
 import re
 
@@ -29,65 +29,59 @@ def home(request):
     category = request.GET.get('category')
     sortBy = request.GET.get('sortBy')
     from_date = request.GET.get('from_date')
-    to_date = request.GET.get('to_date')      
+    to_date = request.GET.get('to_date')
+    refresh = request.GET.get('refresh')  # New parameter for refresh
+
+    context = {}
 
     if keyword:
-        # Check if the keyword is already in the search history for the current user
         history_entry = SearchHistory.objects.filter(user=request.user, keyword=keyword).first()
+        
+        # If refreshing and history exists, set from_date to the last fetched date
+        if refresh and history_entry:
+            last_fetched = history_entry.last_fetched.strftime('%Y-%m-%d')
+            from_date = last_fetched if not from_date else max(from_date, last_fetched)
 
-        if history_entry:
-            return render(request, 'news_api/home.html', {'articles': history_entry.results})
-
-        # Sanitize cache key
         sanitized_keyword = sanitize_cache_key(keyword)
         cache_key = f'news_{sanitized_keyword}'
-
-        # Check if cached data exists
         cached_articles = cache.get(cache_key)
-        if cached_articles:
-            # Save the cached data to the search history for future searches
-            SearchHistory.objects.create(user=request.user, keyword=keyword, results=cached_articles)
-            return render(request, 'news_api/home.html', {'articles': cached_articles})
 
-        try:
-            url = f'https://newsapi.org/v2/everything?q={keyword}&apiKey={NEWS_API_KEY}'
-            # LANGUAGE
-            if language:
-                url += f'&language={language}'
-            # CATEGORY
-            if category:
-                url += f'&category={category}'
-            # SORT BY
-            if sortBy:
-                url += f'&sortBy={sortBy}'
-            # DATE RANGE
-            if from_date:
-                url += f'&from={from_date}'
-            if to_date:
-                url += f'&to={to_date}'
-            
-            response = requests.get(url)
-            response.raise_for_status()  # Raise an exception for non-200 status codes
-            data = response.json()
-            articles = data['articles']
+        if cached_articles and not refresh:
+            context['articles'] = cached_articles
+        else:
+            try:
+                url = f'https://newsapi.org/v2/everything?q={keyword}&apiKey={NEWS_API_KEY}'
+                if language:
+                    url += f'&language={language}'
+                if category:
+                    url += f'&category={category}'
+                if sortBy:
+                    url += f'&sortBy={sortBy}'
+                if from_date:
+                    url += f'&from={from_date}'
+                if to_date:
+                    url += f'&to={to_date}'
+                
+                response = requests.get(url)
+                response.raise_for_status()
+                data = response.json()
+                articles = data['articles']
+                
+                # Update cache and search history
+                cache.set(cache_key, articles, 900)
+                if history_entry:
+                    history_entry.results = articles
+                    history_entry.last_fetched = timezone.now()
+                    history_entry.save()
+                else:
+                    SearchHistory.objects.create(user=request.user, keyword=keyword, results=articles)
 
-            # Cache the fetched data for 15 minutes (900 seconds)
-            cache.set(cache_key, articles, 900)
-
-            # Save the results to the search history
-            SearchHistory.objects.create(user=request.user, keyword=keyword, results=articles)
-
-            context = {'articles': articles}
-
-        except requests.exceptions.RequestException as e:
-            # Handle errors like network issues or invalid API key
-            context = {'error': f"An error occurred: {e}"}
-
-    else:
-        # Handle case where no keyword is provided
-        context = {}
+                context['articles'] = articles
+            except requests.exceptions.RequestException as e:
+                context['error'] = f"An error occurred: {e}"
 
     return render(request, 'news_api/home.html', context)
+
 
 
 @login_required
