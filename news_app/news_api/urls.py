@@ -14,5 +14,6 @@ urlpatterns = [
     
     path('login/', views.signin, name='signin'),
     path('not_authorized/', views.not_authorized, name='not_authorized'),
-
+    
+    path('search-history/', views.search_history, name='search_history'),
 ]

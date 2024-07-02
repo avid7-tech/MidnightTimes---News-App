@@ -1,0 +1,18 @@
+<!-- search_history.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search History</title>
+</head>
+<body>
+    <h1>Search History</h1>
+    <ul>
+        {% for entry in search_history %}
+            <li>{{ entry.keyword }} - {{ entry.searched_at }}</li>
+        {% empty %}
+            <li>No search history available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

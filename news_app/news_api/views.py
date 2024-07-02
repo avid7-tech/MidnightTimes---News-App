@@ -12,6 +12,7 @@ from .forms import KeywordForm, UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
+from .models import SearchHistory
 
 load_dotenv()
 NEWS_API_KEY = os.getenv('NEWS_API_KEY')
@@ -59,6 +60,8 @@ def home(request):
 
             # Cache the fetched data for 15 minutes (900 seconds)
             cache.set(cache_key, articles, 900)
+            
+            SearchHistory.objects.create(user=request.user, keyword=keyword)
 
             context = {'articles': articles}
 
@@ -72,6 +75,10 @@ def home(request):
 
     return render(request, 'news_api/home.html', context)
 
+@login_required
+def search_history(request):
+    search_history = SearchHistory.objects.filter(user=request.user).order_by('-searched_at')
+    return render(request, 'news_api/search_history.html', {'search_history': search_history})
 
 def register(request):
   if request.method == 'POST':
