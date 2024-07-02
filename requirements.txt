@@ -1,0 +1,14 @@
+Django==5.0.6
+python-dotenv==1.0.1
+Requests==2.32.3
+crispy-bootstrap5 @ git+https://github.com/django-crispy-forms/crispy-bootstrap5.git@1685644492038ed1150cb36a3bcedddb81f66673
+celery==5.4.0
+django-background-tasks==1.2.5
+django-browser-reload==1.13.0
+django-celery-beat==2.6.0
+django-compat==1.0.15
+django-crispy-forms==2.2
+django-redis==5.4.0
+django-tailwind==3.8.0
+django-timezone-field==6.1.0
+djangorestframework==3.15.2

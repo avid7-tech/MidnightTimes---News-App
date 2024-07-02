@@ -17,3 +17,21 @@ urlpatterns = [
     
     path('search-history/', views.search_history, name='search_history'),
 ]
+"""
+URL configuration for the Django application.
+
+This `urlpatterns` list routes URLs to views. For example:
+- The home page view is accessible at the root URL ('').
+- The user registration view is accessible at 'register/'.
+- The keyword creation view is accessible at 'create/'.
+- The keyword deletion view is accessible at '<int:keyword_id>/delete/'.
+- The keyword list view is accessible at 'list/'.
+- The control panel view is accessible at 'control/'.
+- The block user view is accessible at 'control/block/<int:user_id>/'.
+- The set user limit view is accessible at 'control/set_limit/<int:user_id>/'.
+- The sign-in view is accessible at 'login/'.
+- The not authorized view is accessible at 'not_authorized/'.
+- The search history view is accessible at 'search-history/'.
+
+Each path is associated with a specific view function in the views module.
+"""
