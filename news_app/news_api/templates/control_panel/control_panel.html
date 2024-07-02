@@ -4,7 +4,6 @@
 
 {% block title %}
 <title>Admin Panel</title>
-
 {% endblock %}
 
 <div class="container mt-3">
@@ -50,5 +49,25 @@
       </tbody>
     </table>
     <a href="{% url 'keyword_list' %}" class="btn btn-primary">Go back</a>
+  </div>
+
+  <div class="container mt-5">
+    <h2>Trending Keywords</h2>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Keyword</th>
+          <th scope="col">Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for keyword in trending_keywords %}
+          <tr>
+            <td>{{ keyword.keyword }}</td>
+            <td>{{ keyword.keyword_count }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 {% endblock %}

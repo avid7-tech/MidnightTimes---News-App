@@ -3,7 +3,7 @@ from django.core.cache import cache
 import requests
 from dotenv import load_dotenv
 import os
-
+from django.db.models import Count
 from .models import Keyword
 from .forms import UserRegistrationForm
 from django.contrib.auth import login
@@ -13,9 +13,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from .models import SearchHistory
+import re
 
 load_dotenv()
 NEWS_API_KEY = os.getenv('NEWS_API_KEY')
+
+def sanitize_cache_key(key):
+    # Replace any non-alphanumeric character with an underscore
+    return re.sub(r'[^a-zA-Z0-9]', '_', key)
 
 @login_required
 def home(request):
@@ -33,7 +38,9 @@ def home(request):
         if history_entry:
             return render(request, 'news_api/home.html', {'articles': history_entry.results})
 
-        cache_key = f'news_{keyword}'  # Unique cache key based on keyword
+        # Sanitize cache key
+        sanitized_keyword = sanitize_cache_key(keyword)
+        cache_key = f'news_{sanitized_keyword}'
 
         # Check if cached data exists
         cached_articles = cache.get(cache_key)
@@ -81,6 +88,7 @@ def home(request):
         context = {}
 
     return render(request, 'news_api/home.html', context)
+
 
 @login_required
 def search_history(request):
@@ -199,3 +207,19 @@ def signin(request):
     else:
       # Redirect non-superuser login attempts
       return redirect('not_authorized')
+
+@login_required
+def control(request):
+    # Get all users (excluding the currently logged-in user)
+    users = User.objects.filter(is_superuser=False).exclude(pk=request.user.pk)
+
+    # Get the top-10 trending keywords
+    trending_keywords = SearchHistory.objects.values('keyword').annotate(keyword_count=Count('keyword')).order_by('-keyword_count')[:10]
+
+    # Context data for the template
+    context = {
+        'users': users,
+        'trending_keywords': trending_keywords,
+    }
+
+    return render(request, 'control_panel/control_panel.html', context)
