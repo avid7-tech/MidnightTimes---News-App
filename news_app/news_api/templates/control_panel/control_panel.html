@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Panel</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+        th {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Control Panel</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Block/Unblock</th>
+                <th>Keyword Limit</th>
+                <th>Action</th>  </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <form method="POST" action="{% url 'block_user' user.pk %}">  {% csrf_token %}
+                        {% if user.is_active %}
+                            <button type="submit">Block</button>
+                        {% else %}
+                            <button type="submit">Unblock</button>
+                        {% endif %}
+                    </form>
+                </td>
+                <td>{{ user.keyword_limit }}  </td>
+                <td>  <form method="POST" action="{% url 'set_limit' user.pk %}">  {% csrf_token %}
+                        <input type="number" name="limit" min="1" required>  <button type="submit">Set Limit</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

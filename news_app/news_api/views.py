@@ -10,6 +10,7 @@ from django.contrib.auth import login
 from django.shortcuts import get_object_or_404, redirect
 from .forms import KeywordForm, UserRegistrationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 load_dotenv()
@@ -118,3 +119,53 @@ def keyword_delete(request, keyword_id):
     keyword.delete()
     return redirect('keyword_list')
   return render(request, 'keyword_confirm_delete.html', {'keyword': keyword})
+
+
+@login_required
+def control(request):
+    # Get all users (excluding the currently logged-in user)
+    users = User.objects.filter(is_superuser=False).exclude(pk=request.user.pk)
+
+    # Context data for the template
+    context = {'users': users}
+
+    return render(request, 'control_panel/control_panel.html', context)
+
+
+def block_user(request, user_id):
+    if request.method == 'POST':
+        user = get_object_or_404(User, pk=user_id)
+
+        # Toggle the user's active status
+        user.is_active = not user.is_active
+        user.save()
+
+        # Redirect back to the control panel
+        return redirect('control')
+
+    return redirect('control')  # Redirect if not a POST request
+
+
+def set_limit(request, user_id):
+    if request.method == 'POST':
+        user = get_object_or_404(User, pk=user_id)
+
+        # Get the posted limit value (ensure it's an integer)
+        try:
+            limit = int(request.POST['limit'])
+            if limit < 1:
+                raise ValueError("Limit must be a positive integer.")
+        except (ValueError, KeyError):
+            # Handle invalid or missing limit data
+            error_message = "Invalid limit value. Please enter a positive integer."
+            return render(request, 'control_panel/control_panel.html', {'error': error_message, 'users': User.objects.filter(is_superuser=False).exclude(pk=request.user.pk)})
+
+        # Update the user's keyword limit (assuming you have a `keyword_limit` field)
+        user.keyword_limit = limit
+        user.save()
+
+        context = {'success_message': "Keyword limit updated successfully!"}
+        return render(request, 'control_panel/control_panel.html', context)
+
+
+    return redirect('control')  # Redirect if not a POST request
