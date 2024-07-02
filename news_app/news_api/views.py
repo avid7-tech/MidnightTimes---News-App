@@ -27,11 +27,19 @@ def home(request):
     to_date = request.GET.get('to_date')      
 
     if keyword:
+        # Check if the keyword is already in the search history for the current user
+        history_entry = SearchHistory.objects.filter(user=request.user, keyword=keyword).first()
+
+        if history_entry:
+            return render(request, 'news_api/home.html', {'articles': history_entry.results})
+
         cache_key = f'news_{keyword}'  # Unique cache key based on keyword
 
         # Check if cached data exists
         cached_articles = cache.get(cache_key)
         if cached_articles:
+            # Save the cached data to the search history for future searches
+            SearchHistory.objects.create(user=request.user, keyword=keyword, results=cached_articles)
             return render(request, 'news_api/home.html', {'articles': cached_articles})
 
         try:
@@ -51,8 +59,6 @@ def home(request):
             if to_date:
                 url += f'&to={to_date}'
             
-            
-            
             response = requests.get(url)
             response.raise_for_status()  # Raise an exception for non-200 status codes
             data = response.json()
@@ -60,8 +66,9 @@ def home(request):
 
             # Cache the fetched data for 15 minutes (900 seconds)
             cache.set(cache_key, articles, 900)
-            
-            SearchHistory.objects.create(user=request.user, keyword=keyword)
+
+            # Save the results to the search history
+            SearchHistory.objects.create(user=request.user, keyword=keyword, results=articles)
 
             context = {'articles': articles}
 
