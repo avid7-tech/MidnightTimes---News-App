@@ -14,42 +14,36 @@
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+    
     <div class="container mx-auto p-4">
+        <nav class="flex justify-between items-center bg-gray-800 py-4 px-4 rounded">
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded">Logout</button>
+            </form>
+            {% endif %}
+            <ul class="flex space-x-4">
+                <li class="nav-item mx-2">
+                    <a href="{% url 'keyword_list' %}" class="text-white hover:text-blue-200 px-3 py-2 rounded bg-gray-700 hover:bg-blue-500 transition duration-300">Notes Section</a>
+                
+                <li class="nav-item mx-2">
+                    <a href="{% url 'search_history' %}" class="text-white hover:text-blue-200 px-3 py-2 rounded bg-gray-700 hover:bg-blue-500 transition duration-300">Keyword History</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a href="{% url 'signin' %}" class="text-white hover:text-blue-200 px-3 py-2 rounded bg-gray-700 hover:bg-blue-500 transition duration-300">Admin Panel</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+    
+      
+      
         <h1 class="mb-4 text-3xl font-extrabold text-center text-gray-900 dark:text-gray-100 md:text-5xl lg:text-6xl">
             <span class="text-transparent bg-clip-text bg-gradient-to-r to-blue-700 from-purple-700 dark:to-blue-400 dark:from-purple-400">THE MIDNIGHT TIMES</span>
         </h1>
         
-        <div class="flex flex-col space-y-4">
-            <div class="mb-4">
-                <!-- Logout Button -->
-                {% if user.is_authenticated %}
-                  <form  method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</button>
-                  </form>
-                {% endif %}
-            </div>
-            <p class="mb-4">
-              <a href="{% url 'keyword_create' %}" class="text-white bg-blue-500 py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Create Keyword
-              </a>
-            </p>
-            <p class="mb-4">
-                <a href="{% url 'keyword_list' %}" class="text-white bg-blue-500 py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    See Keywords
-                </a>
-            </p>
-            <p class="mb-4">
-              <a href="{% url 'search_history' %}" class="text-white bg-blue-500 py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Keyword History
-              </a>
-            </p>
-            <p class="mb-4">
-                <a href="{% url 'signin' %}" class="text-white bg-blue-500 py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Admin Panel</a>
-              </a>
-            </p>
-            
-        </div>
         
         <form method="get" action="" class="mb-8">
             <div class="flex flex-col items-center space-y-4 mb-6">

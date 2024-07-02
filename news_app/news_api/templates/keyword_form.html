@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% load crispy_forms_tags %}
 {% block title %}
-Keyword Form
+Notes
 {% endblock %}
 
 {% block content %}
 
-<h1 class="text-center  mt-4">Add your Keyword</h1>
+<h1 class="text-center  mt-4">Add your Note</h1>
 
 <h2> 
   {%if form.instance.pk %} 
@@ -17,8 +17,8 @@ Keyword Form
     <button class="btn btn-primary" type="submit">Submit</button>
   </form>
   <div class="d-flex justify-content-between align-items-center mt-3">
-    <a href="{% url 'keyword_list' %}" class="btn btn-light">Back to Keyword Page</a>
-    <a href="{% url 'home' %}" class="btn btn-success mt-3">Back to Home</a>
+    <a href="{% url 'keyword_list' %}" class="btn btn-light">Back to Notes Page</a>
+    <a href="{% url 'home' %}" class="btn btn-success mt-3">Home</a>
   </div>
   
 </h2>

@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Keyword Page
+Note Page
 {% endblock %}
 
 {% block content %}
 
-<h1 class="text-center mt-4">Keywords Page</h1>
+<h1 class="text-center mt-4">Notes Page</h1>
 
 <div class="d-flex justify-content-between align-items-center mt-3">
-  <a href="{% url 'keyword_create' %}" class="btn btn-primary">Add a Keyword</a>
-  <a href="{% url 'home' %}" class="btn btn-success">Back to Home</a>
+  <a href="{% url 'keyword_create' %}" class="btn btn-primary">Add a Note</a>
+  <a href="{% url 'home' %}" class="btn btn-success">Home</a>
   <a href="{% url 'signin' %}" class="btn btn-warning">Admin Panel</a>
 </div>
 
@@ -22,7 +22,7 @@ Keyword Page
         <div class="card-body">
           <h5 class="card-title">{{ keyword.text }}</h5>
           {% if keyword.user == user %}
-          <a href="{% url 'keyword_delete' keyword.id %}" class="btn btn-danger">Delete</a>
+          <a href="{% url 'keyword_delete' keyword.id %}" class="btn btn-danger">X</a>
           {% endif %}
         </div>
       </div>
