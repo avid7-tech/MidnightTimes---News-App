@@ -68,7 +68,7 @@ cd news_app
 3.  Setup the virtual environment:
 
 ```
-python3 -m venv venv
+py -m venv .venv
 .venv/bin/activate
 ```
 
