@@ -155,3 +155,60 @@ urlpatterns = [
     path('search-history/', views.search_history, name='search_history'),
 ]
 ```
+## Duration
+I spent a total of approximately 33+ hours working on this project. The time was allocated across various phases as follows:
+
+1.  **Learning Django**:
+    
+    -   Time: 10 hours
+    -   Activities: As I was new to Django, I first went through the official documentation and several tutorials to understand the framework and its components.
+2.  **Initial Planning and Setup**:
+    
+    -   Time: 1.5 hours
+    -   Activities: Project planning, setting up the development environment, and configuring Django.
+3.  **Model and Database Design**:
+    
+    -   Time: 3 hours
+    -   Activities: Designing models for `Keyword` and `SearchHistory`, setting up SQLite database, and creating migrations.
+4.  **User Authentication and Registration**:
+    
+    -   Time: 2 hours
+    -   Activities: Implementing user registration, login, and authentication features.
+5.  **Keyword Management**:
+    
+    -   Time: 1.5 hours
+    -   Activities: Developing views and forms for creating, listing, and deleting keywords.
+6.  **News Search Integration**:
+    
+    -   Time: 6 hours
+    -   Activities: Integrating News API, implementing search functionality with filters, and setting up caching.
+7.  **Search History Feature**:
+    
+    -   Time: 1.5 hours
+    -   Activities: Creating the search history view, storing search results, and displaying history to users.
+8.  **Control Panel for Superusers**:
+    
+    -   Time: 3 hours
+    -   Activities: Developing the control panel, managing user blocks, and trending keyword integration
+9.  **Frontend Development**:
+    
+    -   Time: 2 hours
+    -   Activities: Designing and coding templates using Bootstrap and tailwind CSS for a user-friendly interface.
+11.  **Documentation**:
+    
+    -   Time: 2 hours
+    -   Activities: Writing project docstring, README file.
+## Experience
+Since I was new to Django, I invested significant time in learning the framework through the documentation and tutorials. This helped me how to use the Django "Ridiculously fast" as give in official documentation.
+
+Project helped me in thinking critically, using various logics to make something happen and at the same time not to obstruct other components in app.
+
+Caching the user results, and also storing them locally helped me appreciate the importance of optimizing application performance and reducing load times.
+
+Breaking down project into manageable phases and setting clear goals helped in efficient management.
+
+Making sure easy and user-friendly control for user was also an important part.
+
+Achieving the major milestones as per the given instructions feels incredibly satisfying and gives a strong sense of accomplishment.
+
+Thanks a lot for the opportunity!
