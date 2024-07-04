@@ -35,16 +35,29 @@ def sanitize_cache_key(key):
 @login_required
 def home(request):
     """
-    View for the home page where users can search for news articles.
+    Home view for fetching and displaying news articles based on user input.
 
-    Handles keyword search with optional filtering by language, category, sorting, date range,
-    and cache refreshing.
+    This view handles the following parameters from the request:
+    - `keyword`: The search keyword for news articles.
+    - `language`: The language filter for news articles.
+    - `category`: The category filter for news articles.
+    - `sortBy`: The sort order for news articles.
+    - `from_date`: The start date for filtering news articles.
+    - `to_date`: The end date for filtering news articles.
+    - `refresh`: Boolean flag to refresh the cached articles.
+
+    The view performs the following operations:
+    1. Fetches the search keyword and other parameters from the request.
+    2. Checks if there is a cached result for the keyword. If found and `refresh` is not set, it uses the cached results.
+    3. If no cached result is found or `refresh` is set, it makes a request to the News API.
+    4. Saves the fetched results in the cache and updates the search history for the user.
+    5. Renders the results in the 'news_api/home.html' template.
 
     Args:
-        request (HttpRequest): The request object containing GET parameters.
+        request (HttpRequest): The HTTP request object.
 
     Returns:
-        HttpResponse: Rendered template with search results or an error message.
+        HttpResponse: The rendered HTML page with news articles or error message.
     """
     keyword = request.GET.get('keyword')
     language = request.GET.get('language')
@@ -60,7 +73,9 @@ def home(request):
         history_entry = SearchHistory.objects.filter(user=request.user, keyword=keyword).first()
         if refresh and history_entry:
             last_fetched = history_entry.last_fetched.strftime('%Y-%m-%d')
-            from_date = last_fetched if not from_date else max(from_date, last_fetched)
+            # Use the later of the provided from_date or last_fetched
+            if not from_date or from_date < last_fetched:
+                from_date = last_fetched
 
         sanitized_keyword = sanitize_cache_key(keyword)
         cache_key = f'news_{sanitized_keyword}'

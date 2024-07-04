@@ -141,10 +141,34 @@
         // REFRESH BUTTON
         document.getElementById('refreshButton').addEventListener('click', function(event) {
             event.preventDefault();  // Prevent the form from submitting immediately
+        
+            // Get current URL parameters
             const urlParams = new URLSearchParams(window.location.search);
+        
+            // Update refresh parameter
             urlParams.set('refresh', 'true');
-            window.location.search = urlParams.toString();  // Submit the form with the updated parameters
+        
+            // Update from_date and to_date based on current selection or last fetched date
+            const fromDateInput = document.querySelector('input[name="from_date"]');
+            const toDateInput = document.querySelector('input[name="to_date"]');
+            const currentDate = new Date().toISOString().split('T')[0];  // Today's date in YYYY-MM-DD format
+        
+            // Set from_date to current date or existing value if it's earlier than the current date
+            if (!fromDateInput.value || fromDateInput.value < currentDate) {
+                fromDateInput.value = currentDate;
+                urlParams.set('from_date', currentDate);
+            }
+        
+            // Set to_date to current date or existing value if it's earlier than the current date
+            if (!toDateInput.value || toDateInput.value < currentDate) {
+                toDateInput.value = currentDate;
+                urlParams.set('to_date', currentDate);
+            }
+        
+            // Update the URL with new parameters
+            window.location.search = urlParams.toString();
         });
+        
 
         // SORT BY TOGGLE 
         document.getElementById('sortToggleButton').addEventListener('click', function() {
