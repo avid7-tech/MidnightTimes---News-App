@@ -150,3 +150,8 @@ LOGIN_URL = '/accounts/login'
 
 LOGIN_REDIRECT_URL = '/news_api/'
 LOGOUT_REDIRECT_URL = '/news_api/'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",  # Example for a frontend running on localhost
+    "http://13.127.126.142:8000/",  # Example for your production domain
+]
