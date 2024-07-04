@@ -156,4 +156,4 @@ CORS_ALLOWED_ORIGINS = [
     "http://13.127.126.142:8000/",  # Example for your production domain
 ]
 
-SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = True
