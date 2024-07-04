@@ -1,140 +1,172 @@
-{% load static tailwind_tags %}
-{% load static %}
-<!DOCTYPE html>
-<html lang="en" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Midnight Times</title>
-    {% tailwind_css %}
-    <style>
-        body, html {
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-        }
-    </style>
-</head>
-<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+{% extends "layout.html" %}
+
+{% block title %}
+<title>The Midnight Times</title>
+{% endblock %} 
+
+{% block content %}
+{% comment %} <body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100"> {% endcomment %}
     <!-- NAVBAR STARTS HERE-->
     <div class="container mx-auto p-4">
-        <nav class="flex justify-between items-center bg-gray-800 py-4 px-4 rounded">
-            <ul class="flex space-x-4">
-                <li class="nav-item mx-2">
-                    <a href="{% url 'keyword_list' %}" class="text-white hover:text-blue-200 px-3 py-2 rounded bg-gray-700 hover:bg-blue-500 transition duration-300">Notes Section</a>
-                    
-                    <li class="nav-item mx-2">
-                        <a href="{% url 'search_history' %}" class="text-white hover:text-blue-200 px-3 py-2 rounded bg-gray-700 hover:bg-blue-500 transition duration-300">Keyword History</a>
-                    </li>
-                    <li class="nav-item mx-2">
-                        <a href="{% url 'signin' %}" class="text-white hover:text-blue-200 px-3 py-2 rounded bg-gray-700 hover:bg-blue-500 transition duration-300">Admin Panel</a>
-                    </li>
-                </ul>
-                {% if user.is_authenticated %}
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="text-white bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded">Logout</button>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded-bottom">
+          <div class="container-fluid">
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'keyword_list' %}">Notes Section</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'search_history' %}">Keyword History</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'signin' %}">Admin Panel</a>
+                </li>
+              </ul>
+      
+              {% comment %} {% if user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}" class="d-flex">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger ms-2">Logout</button>
                 </form>
-                {% endif %}
-            </nav>
-        </div>
+              {% endif %} {% endcomment %}
+            </div>
+          </div>
+        </nav>
+      </div>
+      
         <!-- NAVBAR ENDS HERE-->
         
         <!-- MAIN HEADING-->
-        <h1 class="mb-4 text-3xl font-extrabold text-center text-gray-900 dark:text-gray-100 md:text-5xl lg:text-6xl">
-            <span class="text-transparent bg-clip-text bg-gradient-to-r to-blue-700 from-purple-700 dark:to-blue-400 dark:from-purple-400">THE MIDNIGHT TIMES</span>
-        </h1>
+        <div class="text-center mb-4">
+            <h1 class="display-2">
+              <span class="text-gradient">THE MIDNIGHT TIMES</span>
+            </h1>
+          </div>
+          
+          
         
         <!-- FORM ELEMENTS -->
-        <form method="get" action="" class="mb-8">
-            <div class="flex flex-col items-center space-y-4 mb-6">
-                <!-- Keyword Input -->
-                <input type="text" name="keyword" placeholder="Enter keyword" class="w-full md:w-1/2 p-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none dark:bg-gray-800 dark:text-gray-100">
-                
-                <!-- Search Button -->
-                <button type="submit" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700 ml-2 dark:bg-blue-700 dark:hover:bg-blue-500">Search</button>
-            </div>
-            <!-- Refresh Button -->
-            <div class="flex justify-center mb-8">
-                <button id="refreshButton" class="bg-green-500 text-white p-2 rounded-md hover:bg-green-700 mx-2 dark:bg-green-700 dark:hover:bg-green-500">
-                Refresh
+        <form method="get" action="" class="mb-4">
+            <div class="row mb-4">
+              <div class="col-md-8">
+                <div class="input-group">
+                  <input
+                    type="text"
+                    name="keyword"
+                    placeholder="Enter keyword"
+                    class="form-control form-control-lg"
+                    aria-label="Keyword"
+                  />
+                  <button type="submit" class="btn btn-primary">
+                    Search
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-4 d-flex align-items-center justify-content-end">
+                <button
+                  type="button"
+                  id="refreshButton"
+                  class="btn btn-success me-2"
+                >
+                  Refresh
                 </button>
+                <select
+                  name="language"
+                  class="form-select form-select-sm me-2"
+                  aria-label=".form-select-sm example"
+                >
+                  <option value="">All Languages</option>
+                  <option value="ar">Arabic</option>
+                  <option value="ge">German</option>
+                  <option value="zh">Chinese</option>
+                </select>
+                <select
+                  name="sortBy"
+                  class="form-select form-select-sm me-2"
+                  aria-label=".form-select-sm example"
+                >
+                  <option value="">None</option>
+                  <option value="relevancy">Most Relevant</option>
+                  <option value="popularity">Most Popular</option>
+                  <option value="publishedAt">Newest</option>
+                </select>
+                <select
+                  name="category"
+                  class="form-select form-select-sm"
+                  aria-label=".form-select-sm example"
+                >
+                  <option value="">All</option>
+                  <option value="business">Business</option>
+                  <option value="entertainment">Entertainment</option>
+                  <option value="technology">Technology</option>
+                </select>
+              </div>
             </div>
-            <div class="flex flex-wrap items-center justify-center">
-                <!-- Language Dropdown -->
-                <select name="language" class="m-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md w-full md:w-1/6 dark:bg-gray-800 dark:text-gray-100">
-                    <option value="">All Languages</option>
-                    <option value="ar">Arabic</option>
-                    <option value="ge">German</option>
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="he">Hebrew</option>
-                    <option value="it">Italian</option>
-                    <option value="nl">Dutch</option>
-                    <option value="no">Norwegian</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="ru">Russian</option>
-                    <option value="sv">Swedish</option>
-                    <option value="ud">Urdu</option>
-                    <option value="zh">Chinese</option>
-                </select>
-        
-                <!-- From Date -->
-                <input type="date" name="from_date" class="m-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-gray-100">
-        
-                <!-- To Date -->
-                <input type="date" name="to_date" class="m-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-gray-100">
-        
-                <!-- Sort By Dropdown -->
-                <select name="sortBy" class="m-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-gray-100">
-                    <option value="">None</option>
-                    <option value="relevancy">Most Relevant</option>
-                    <option value="popularity">Most Popular</option>
-                    <option value="publishedAt">Newest</option>
-                </select>
-        
-                <!-- Category Dropdown -->
-                <select name="category" class="m-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-gray-100">
-                    <option value="">All</option>
-                    <option value="business">Business</option>
-                    <option value="entertainment">Entertainment</option>
-                    <option value="general">General</option>
-                    <option value="health">Health</option>
-                    <option value="science">Science</option>
-                    <option value="sports">Sports</option>
-                    <option value="technology">Technology</option>
-                </select>
+            <div class="row mb-4">
+              <div class="col-md-2">
+                <input
+                  type="date"
+                  name="from_date"
+                  class="form-control form-control-sm"
+                  aria-label="From Date"
+                />
+              </div>
+              <div class="col-md-2">
+                <input
+                  type="date"
+                  name="to_date"
+                  class="form-control form-control-sm"
+                  aria-label="To Date"
+                />
+              </div>
             </div>
-        </form>
-        
-        {% if keyword %}
-        <p class="text-lg font-semibold text-center mb-4">Showing results for: <span class="text-blue-500">{{ keyword }}</span></p>
-        {% endif %}
-
-        <!--Buttons for sort-->
-        <div class="flex justify-center mb-8">
-            <button id="sortToggleButton" class="bg-green-500 text-white p-2 rounded-md hover:bg-green-700 mx-2 dark:bg-green-700 dark:hover:bg-green-500">
-                Sort <span id="sortArrow">&#9650;</span>
+          </form>
+          
+          {% if keyword %}
+          <p class="text-center mb-4">Showing results for: <span class="text-primary">{{ keyword }}</span></p>
+          {% endif %}
+          
+          <!-- Buttons for sort -->
+          <div class="d-flex justify-content-center mb-4">
+            <button id="sortToggleButton" class="btn btn-outline-success">
+              Sort <span id="sortArrow">&#9650;</span>
             </button>
-        </div>
+          </div>
+          
         
         <!-- NEWS CARDS START HERE -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {% for i in articles %}
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                    {% if i.urlToImage %}
-                    <img src="{{ i.urlToImage | default:'' }}" alt="" class="w-full h-48 object-cover truncate break-words mb-4" onerror="this.onerror=null;this.src='https://via.placeholder.com/200';">
-                    {% endif %}
-                    <h2 class="text-xl font-bold mb-2">{{ i.title | default:'No title available' }}</h2>
-                    <p class="text-gray-700 dark:text-gray-300 mb-2">{{ i.author | default:'Unknown author' }}</p>
-                    <p class="text-gray-700 dark:text-gray-300 mb-4">{{ i.description | default:'No description available' }}</p>
-                    <p class="text-gray-700 dark:text-gray-300 mb-4">{{ i.content | default:'No description available' }}</p>
-                    <a href="{{ i.url | default:'#' }}" target="_blank" class="text-blue-500 hover:underline truncate break-words">Click for details</a>
-                    
-                    <small class="block text-gray-500 dark:text-gray-400 mt-2">Published at: {{ i.publishedAt | default:'Unknown date' }}</small>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for article in articles %}
+              <div class="col mb-4">
+                <div class="card border-0 rounded-lg shadow-lg">
+                  {% if article.urlToImage %}
+                    <img src="{{ article.urlToImage }}" alt="Article Image" class="card-img-top rounded-top">
+                  {% else %}
+                    <img src="" alt="Placeholder Image" class="card-img-top rounded-top">
+                  {% endif %}
+                  <div class="card-body" style="height: 350px; overflow: hidden;">
+                    <h2 class="card-title h5 mb-3">{{ article.title | default:'No title available' }}</h2>
+                    <p class="card-text text-muted mb-2">Author: {{ article.author | default:'Unknown' }}</p>
+                    <p class="card-text mb-3">{{ article.description | default:'No description available' }}</p>
+                    <p class="card-text mb-3">{{ article.content | default:'No content available' }}</p>
+                    <a href="{{ article.url | default:'#' }}" target="_blank" class="btn btn-primary">Read more</a>
+                  </div>
+                  <div class="card-footer bg-transparent border-top-0 text-muted small">
+                    Published at: {{ article.publishedAt | default:'Unknown date' }}
+                  </div>
                 </div>
+              </div>
             {% endfor %}
-        </div>
-    </div>
+          </div>
+          
+          
+          
+          
 
 
     <script>
@@ -200,5 +232,4 @@
         });
     </script>
     
-</body>
-</html>
+{% endblock %}
