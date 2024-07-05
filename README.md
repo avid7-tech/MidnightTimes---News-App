@@ -31,10 +31,8 @@ The Midnight Times is a customer-facing web-based application allows users to se
 ## Visuals
 
 ### Home Page
-
-Search results for Ronaldo and Arab language
-![The Midnight Times - Google Chrome 03-07-2024 10_54_35](https://github.com/avid7-tech/MidnightTimes---News-App/assets/76569713/e70f6b9a-2198-4b51-ab09-5dd9e07bb44c)
-
+Search Results
+![Screenshot 2024-07-05 102512](https://github.com/avid7-tech/MidnightTimes---News-App/assets/76569713/41e6239a-701c-4374-b0b8-9e1d7821c803)
 
 ### Registration Form
 ![The Midnight Times - Google Chrome 03-07-2024 11_01_11](https://github.com/avid7-tech/MidnightTimes---News-App/assets/76569713/3cba3104-6600-4b30-9ea8-781b749e7333)
