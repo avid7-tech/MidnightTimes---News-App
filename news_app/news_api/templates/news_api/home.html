@@ -165,11 +165,10 @@
                     <img src="" alt="Placeholder Image" class="card-img-top rounded-top">
                   {% endif %}
                   <div class="card-body" style="height: 350px; overflow: hidden;">
-                    <h2 class="card-title h5 mb-3">{{ article.title | default:'No title available' }}</h2>
+                    <a href="{{ article.url | default:'#' }}" target="_blank" class="card-title h5 mb-3"><h5>{{ article.title | default:'No title available' }}</h5></a>
                     <p class="card-text text-muted mb-2">Author: {{ article.author | default:'Unknown' }}</p>
                     <p class="card-text mb-3">{{ article.description | default:'No description available' }}</p>
                     <p class="card-text mb-3">{{ article.content | default:'No content available' }}</p>
-                    <a href="{{ article.url | default:'#' }}" target="_blank" class="btn btn-primary">Read more</a>
                   </div>
                   <div class="card-footer bg-transparent border-top-0 text-muted small">
                     Published at: {{ article.publishedAt | default:'Unknown date' }}
